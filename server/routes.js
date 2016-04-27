@@ -39,8 +39,6 @@ router.route('/user')
 router.route('/user/:email/:password')
   .get(function(req, res){
     AccountModel.findOne({Email: req.params.email, password:req.params.password},function(err, account){
-      console.log("Email" + req.params.email + "Pass" + req.params.password);
-      console.log(account);
       if(err){
         return res.status(500).send(err);
       }
@@ -54,7 +52,6 @@ router.route('/user/:email/:password')
 //Deletes a user.
 router.route('/user/:email')
   .delete(function(req, res){
-     var url=config.firebase.services;
     AccountModel.findOne({Email:req.params.email}, function (err, account) {
       if(err) {
         return res.status(500).send(err);
