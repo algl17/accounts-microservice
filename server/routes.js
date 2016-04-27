@@ -6,6 +6,7 @@
 var express    = require('express');
 var AccountModel = require('./models/account');
 var AccountUtils = require('./models/account.utils');
+var config = require('../server/config/environment');
 
 module.exports = function(app){
 //Routes for the API
@@ -33,32 +34,13 @@ router.route('/user')
       return res.status(201).json(account);
     });
   });
-//Get all info for a specified user.
-//router.route('/user/:email')
-//  .get(function(req, res){
-//    AccountModel.find( {Email: req.params.email },function(err, account){
-//      if(err){
-//        return res.status(500).send(err);
-//      }
-//      return res.status(200).json(account);
-//    });
-//  });
-
-//Delete an account.
-//router.route('/user/:email')
-//  .delete(function(req, res){
-//    AccountModel.remove({Email: req.params.email }, function (err) {
-//      if(err){
-//        return res.status(500).send(err);
-//      }
-//      return res.status(204).send('No Content');
-//    });
-//  });
 
 //Returns user information.
 router.route('/user/:email/:password')
   .get(function(req, res){
     AccountModel.findOne({Email: req.params.email, password:req.params.password},function(err, account){
+      console.log("Email" + req.params.email + "Pass" + req.params.password);
+      console.log(account);
       if(err){
         return res.status(500).send(err);
       }
@@ -69,9 +51,10 @@ router.route('/user/:email/:password')
     });
   });
 
-//Deletes a habit.
+//Deletes a user.
 router.route('/user/:email')
   .delete(function(req, res){
+     var url=config.firebase.services;
     AccountModel.findOne({Email:req.params.email}, function (err, account) {
       if(err) {
         return res.status(500).send(err);

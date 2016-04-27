@@ -95,19 +95,23 @@ describe('Account Microservice', function() {
           done();
         });
       });
-      it('should return error if Type if missing Birthday', function (done){
+      it('should return the created object on sucess even with missing Birthday', function (done){
         var account = {
-          Email: 'foo.bar@mail',   
-          password: 'foo',   
-          Name: 'Foo',   
+          Email: 'foo12.bar@mail',   
+          password: 'foo12',   
+          Name: 'Foo12',   
           //Birthday: '05-01-1990'
         };
         request(url)
         .post('/user')
         .send(account)
+        .expect('Content-Type',/json/)
+        .expect(201) //Status Code
         .end(function(err,res){
           if(err){throw err;}
-          res.should.have.status(500);
+          res.body.Email.should.equal(account.Email);
+          res.body.password.should.equal(account.password);
+          res.body.Name.should.equal(account.Name);
           done();
         });
       });
@@ -191,7 +195,6 @@ describe('Account Microservice', function() {
         .expect(200) //Status Code
         .end(function(err,res){
           if(err){throw err;}
-          //res.body._id.should.equal(habitId);
           res.body.Email.should.equal(account.Email);  
           res.body.password.should.equal(account.password);  
           res.body.Name.should.equal(account.Name);  
@@ -206,27 +209,5 @@ describe('Account Microservice', function() {
         });
       });
     });
-//    describe('Delete All', function(){
-//      it('should delete all entries for a user', function(done){
-//        request(url)
-//        .delete('/habits/user/foo.bar@mail')
-//        .send()
-//        .expect(204) //Status Code
-//        .end(function(err,res){
-//          if(err){throw err;}
-//          request(url)
-//          .get('/habits/user/foo.bar@mail')
-//          .send()
-//          .expect('Content-Type', /json/)
-//          .expect(200) //Status Code
-//          .end(function(err,res){
-//            if(err){throw err;}
-//            res.body.should.be.Array();
-//            res.body.length.should.equal(0);
-//            done();
-//          });
-//        });
-//      });
-//    });
   });
 });
